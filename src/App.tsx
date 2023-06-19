@@ -1,5 +1,5 @@
 import { RouterProvider } from 'react-router-dom'
-import { mainRoute } from './routes/mainRoute'
+import { mainRoute } from './routes/mainRoutes'
 
 const App = () => {
   return (
