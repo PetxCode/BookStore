@@ -1,10 +1,7 @@
-import React from 'react'
+
 import styled from 'styled-components'
 import { AiFillHeart } from "react-icons/ai"
-
-// 
-
-// 
+import { AiFillEye } from "react-icons/ai"
 
 
 const BodyCard = () => {
@@ -13,28 +10,33 @@ const BodyCard = () => {
             <Container>
                 <Main>
                     <CardHolder>
-                        <Card>
-                            <BlackBox>
+                        <Card> 
+                            <VideoBlack>
+                                <Video
+                                    src="https://cdn.dribbble.com/userupload/7900294/file/original-63268fa12828fada9fecb30a7c12611f.mp4"
+
+                                    muted
+                                    loop
+                                    autoPlay
+                                />
+                                <BlackBox>
                                 <Name>Name</Name>
                                 <Div>
                                     <Icons />
                                     <Icons />
                                 </Div>
-                            </BlackBox>
+                                </BlackBox>
+
+
+                            </VideoBlack>
+
+
                             <Image src='https://cdn.dribbble.com/userupload/7900293/file/still-d8e17c139521b05fa516abd1460c56c4.png?compress=1&resize=640x480&vertical=center' />
 
-                            <Video src="https://cdn.dribbble.com/userupload/7900294/file/original-63268fa12828fada9fecb30a7c12611f.mp4"
-                                muted
-                                loop
-                                autoPlay
-                            />
                         </Card>
                         <Bottom>
                             <LeftSide>
-
-
                                 <HolderAvatar>
-
                                     <CardDisplay>
                                         <Box />
                                         <Top>
@@ -69,8 +71,8 @@ const BodyCard = () => {
                                     <Count>108</Count>
                                 </Holder>
                                 <Holder>
-                                    <LoveIcon />
-                                    <Count>108</Count>
+                                    <EyeIcon />
+                                    <Count>201</Count>
                                 </Holder>
                             </RightSide>
                         </Bottom>
@@ -83,14 +85,23 @@ const BodyCard = () => {
 
 export default BodyCard
 
+const VideoBlack = styled.div`
+width: 350px;
+height: 340px;
+position: relative;
+
+
+`
+
 const Box = styled.div`
 width: 15px;
 height: 15px;
 background-color: silver;
 position:absolute;
-bottom: -8px;
-left: 10px;
-transform: rotate(45deg)
+bottom: -7px;
+left: 20px;
+transform: rotate(45deg);
+z-index:-1;
 
 `
 
@@ -108,7 +119,8 @@ const Down = styled.div`
 display: flex;
 justify-content: space-between;
 align-items: center;
-margin-top: 10px
+margin-top: 10px;
+z-index: 10
 `
 
 const Follow = styled.div`
@@ -154,11 +166,6 @@ justify-content: space-between;
 `
 
 const CardDisplay = styled.div`
-width: 350px;
-height: 200px;
-background-color: silver;
-position: absolute;
-bottom: 40px;
 display:none
 `
 
@@ -167,18 +174,40 @@ const HolderAvatar = styled.div`
 position: relative;
 
 
+:hover ${CardDisplay}{
+    display: block;
+    width: 370px;
+height: 200px;
+background-color: silver;
+position: absolute;
+bottom: 40px;
+left: -10px;
+border-radius: 5px;
+}
 `
 
 
 const Count = styled.div`
-font-size:14px;
-margin-left:2px
+font-size: 10px;
+margin-left:2px;
+font-weight: 700;
+
+`
+
+const EyeIcon = styled(AiFillEye)`
+color: gray;
+transition: all 350ms;
+font-size: 15px;
+
+:hover{
+    color: red
+}
 `
 
 const LoveIcon = styled(AiFillHeart)`
 color: gray;
 transition: all 350ms;
-font-size: 20px;
+font-size: 15px;
 
 :hover{
     color: red
@@ -188,12 +217,13 @@ font-size: 20px;
 const Holder = styled.div`
 display:flex;
 align-items: center;
-margin: 0 3px
+margin: 0 3px;
 `
 
 const RightSide = styled.div`
 display: flex;
 align-items: center;
+margin-right: 5px;
 
 `
 
@@ -224,19 +254,14 @@ height: 25px;
 background-color: purple;
 
 
-:hover ${CardDisplay} {
+/* :hover ${CardDisplay} {
     display:block
-}
+} */
 
 :hover{
     cursor: pointer;
 }
-`
 
-const LeftSide = styled.div`
-display:flex;
-align-items: center;
-position: relative;
 
 :hover ${CardDisplay}{
     display: block;
@@ -246,7 +271,12 @@ background-color: silver;
 position: absolute;
 bottom: 40px;
 }
+`
 
+const LeftSide = styled.div`
+display:flex;
+align-items: center;
+position: relative;
 `
 
 const Bottom = styled.div`
@@ -273,6 +303,31 @@ const Name = styled.div`
 margin-left: 10px
 `
 
+
+const Video = styled.video`
+width: 350px;
+height: 340px;
+object-fit: cover;
+/* opacity: 0; */
+transition: all 350ms;
+
+:hover{
+cursor: pointer;
+display: flex;
+ position: absolute;
+/* top:0;
+left:0; */
+width: 350px;
+height: 340px;
+object-fit: cover;
+z-index: 1;
+opacity: 1;
+transition: all 350ms;
+display: flex;
+}
+`
+
+
 const BlackBox = styled.div`
 display: flex;
 justify-content: space-between;
@@ -289,25 +344,10 @@ color: white;
 padding-bottom: 0px;
 opacity: 0;
 transition: all 350ms;
-`
 
-const Video = styled.video`
-
-/* display: none; */
-transition: all 350ms;
-:hover{
+:hover ${Video}{
+    opacity: 1;
     cursor: pointer;
-    display: flex;
-    position: absolute;
-top:0;
-left:0;
-width: 100%;
-height: 100%;
-object-fit: cover;
-z-index: 1;
-opacity: 1;
-transition: all 350ms;
-
 }
 `
 
@@ -315,8 +355,8 @@ const Image = styled.img`
 position: absolute;
 top:0;
 left:0;
-width: 100%;
-height: 100%;
+width: 350px;
+height: 340px;
 object-fit: cover;
 transition: all 350ms;
 
@@ -330,10 +370,10 @@ transition: all 350ms;
 `
 
 const Card = styled.div`
-width: 100%;
+width: 350px;
 height: 340px;
 position: relative;
-overflow: hidden;
+/* overflow: hidden; */
 
 :hover ${BlackBox}{
     opacity: 1;
@@ -347,7 +387,7 @@ height: 400px;
 border: 1px solid silver;
 margin: 10px;
 border-radius: 5px 5px 0 0;
-overflow: hidden;
+/* overflow: hidden; */
 `
 
 const Main = styled.div`
