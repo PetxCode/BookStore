@@ -26,6 +26,12 @@ const data = [
     { name: "cup-cake7", image: pix7 },
     { name: "cup-cake9", image: pix8 },
     { name: "cup-cake9", image: pix9 },
+    { name: "cup-cake4", image: pix4 },
+    { name: "cup-cake5", image: pix7 },
+    { name: "cup-cake6", image: pix6 },
+    { name: "cup-cake7", image: pix1 },
+    { name: "cup-cake9", image: pix3 },
+    { name: "cup-cake6", image: pix8 },
 ]
 
 
@@ -44,6 +50,19 @@ const DraggingPage = () => {
         setNewData(items)
     }
 
+    const [currentPage, setCurrentPage] = useState<number>(1)
+    const [pagePerView, setPagePerView] = useState<number>(3)
+
+    const lastView = currentPage * pagePerView
+    const firstView = lastView - pagePerView
+    const view = data.slice(firstView, lastView)
+
+    const pages: number[] = []
+
+    for (let i = 1; i < Math.ceil(data.length / pagePerView); i++) {
+        pages.push(i)
+    }
+
     return (
         <div>
             <Container>
@@ -52,7 +71,7 @@ const DraggingPage = () => {
                     <Droppable droppableId="droppableID">
                         {(provided) => (
                             <Main {...provided.droppableProps} ref={provided.innerRef}>
-                                {newData.map((props: any, i) => (
+                                {view.map((props: any, i) => (
                                     <Draggable key={i} index={i} draggableId={`${i}`}>
                                         {(provided) => (
                                             <Card
@@ -71,7 +90,18 @@ const DraggingPage = () => {
                     </Droppable>
                 </DragDropContext>
 
-
+                <Div>
+                    {
+                        pages.map((props: number, i: number) => (
+                            <Button
+                                onClick={() => {
+                                    setCurrentPage(props)
+                                }}
+                                bg={props === currentPage ? "l" : ""}
+                            >{props}</Button>
+                        ))
+                    }
+                </Div>
 
             </Container>
         </div>
@@ -79,6 +109,26 @@ const DraggingPage = () => {
 }
 
 export default DraggingPage
+
+const Button = styled.div<{ bg?: string }>`
+margin: 5px;
+border-radius: 3px;
+padding: 5px 12px;
+background-color: ${({ bg }) => bg ? "darkorange" : "black"};
+color: white;
+transition: all 350ms;
+
+:hover{
+    cursor: pointer;
+    transform: translate(0, -5px);
+}
+`
+
+const Div = styled.div`
+display: flex;
+`
+
+
 
 const Name = styled.div`
 margin-right: 20px
@@ -114,5 +164,6 @@ padding: 30px 0;
 const Container = styled.div`
 width: 100;
 display:flex;
-justify-content: center;
+align-items: center;
+flex-direction: column;
 `   
