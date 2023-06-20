@@ -93,7 +93,7 @@ width: 250px;
 
 const Trend = styled.div`
 display: flex;
-margin-top: 30px;
+margin-top: 50px;
 align-items: center;
 `
 
@@ -163,8 +163,12 @@ const NavC = styled.div`
 display: flex;
 align-items: center;
 justify-content: center;
-overflow: hidden;
+overflow-y: auto;
+overflow-x: hidden;
+
 width: 100%;
+
+
 `
 
 const Main = styled.div`
@@ -197,6 +201,7 @@ object-fit: cover;
 
 const Container = styled.div`
 width: 100%;
-height: calc(80vh - 80px);
+height: calc(90vh - 80px);
 position: relative;
+/* padding: 30px 0; */
 ` 
