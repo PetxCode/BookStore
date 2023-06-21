@@ -1,90 +1,161 @@
-
 import styled from 'styled-components'
 import { AiFillHeart } from "react-icons/ai"
 import { AiFillEye } from "react-icons/ai"
 import { FaRegSave } from "react-icons/fa"
+import { useEffect, useState } from 'react'
+import { getAllEntries } from '../../utils/APIs'
+import ButtonProps from '../../components/reUse/ButtonProps'
 
 
 const BodyCard = () => {
+
+    const [viewData, setViewData] = useState<{}[]>([])
+
+    const [currentPage, setCurrentPage] = useState<number>(1)
+    const [itemPerPage, setItemPerPage] = useState<number>(3)
+
+    let lastView = itemPerPage * currentPage
+    let firstView = lastView - itemPerPage
+
+    let myData = viewData.slice(firstView, lastView)
+
+    let pages: number[] = []
+
+    for (let i = 1; i < Math.ceil(viewData.length / itemPerPage); i++) {
+        pages.push(i)
+    }
+
+
+    useEffect(() => {
+        getAllEntries().then((res: any) => {
+            setViewData(res)
+        })
+    }, [])
+
+
     return (
         <div>
             <Container>
                 <Main>
-                    <CardHolder>
-                        <Card> 
-                            <VideoBlack>
-                                <Video
-                                    src="https://cdn.dribbble.com/userupload/7900294/file/original-63268fa12828fada9fecb30a7c12611f.mp4"
+                    {
+                        myData?.map((props: any) => (
+                            <CardHolder>
+                                <Card>
+                                    <VideoBlack>
+                                        {
+                                            props?.projectVideo.split(".")[3] === "mp4" ? <Video
+                                                src={props?.projectVideo}
 
-                                    muted
-                                    loop
-                                    autoPlay
-                                />
-                                <BlackBox>
-                                <Name>Name</Name>
-                                <Div>
-                                        <Icon />
-                                    <Icons />
-                                </Div>
-                                </BlackBox>
+                                                muted
+                                                loop
+                                                autoPlay
+                                            /> : <Image src={props?.projectImage} />
+                                        }
+
+                                        <BlackBox
+
+                                        >
+                                            <Name
+
+                                            >{props?.name}</Name>
+                                            <Div>
+                                                <Icon />
+                                                <Icons />
+                                            </Div>
+                                        </BlackBox>
 
 
-                            </VideoBlack>
+                                    </VideoBlack>
 
 
-                            <Image src='https://cdn.dribbble.com/userupload/7900293/file/still-d8e17c139521b05fa516abd1460c56c4.png?compress=1&resize=640x480&vertical=center' />
+                                    <Image src={props?.projectImage} />
 
-                        </Card>
-                        <Bottom>
-                            <LeftSide>
-                                <HolderAvatar>
-                                    <CardDisplay>
-                                        <Box />
-                                        <Top>
-                                            <Div1>
-                                                <Avatar1 />
-                                                <Space>Team</Space>
-                                            </Div1>
-                                            <Div2>
-                                                <Title1>emote_agency</Title1>
-                                                <Title11>Czech Republic</Title11>
-                                            </Div2>
+                                </Card>
+                                <Bottom>
+                                    <LeftSide>
+                                        <HolderAvatar>
+                                            <CardDisplay>
+                                                <Box />
+                                                <Top>
+                                                    <Div1>
+                                                        <Avatar1 src={props?.avatar} />
+                                                        <Space>{props?.category}</Space>
+                                                    </Div1>
+                                                    <Div2>
+                                                        <Title1>{props?.projectName}</Title1>
+                                                        <Title11>{props?.projectDescription}</Title11>
+                                                    </Div2>
 
-                                            <Follow>Follow +</Follow>
-                                        </Top>
+                                                    <Follow>Follow +</Follow>
+                                                </Top>
 
-                                        <Down>
-                                            <ImageHolder />
-                                            <ImageHolder />
-                                            <ImageHolder />
-                                        </Down>
+                                                <Down>
+                                                    <ImageHolder src={props.image1} />
+                                                    <ImageHolder src={props.image2} />
+                                                    <ImageHolder src={props.image3} />
+                                                </Down>
 
-                                    </CardDisplay>
-                                    <Avatar />
-                                </HolderAvatar>
-                                <Title>Lepisov Branding</Title>
-                                <Space>Team</Space>
-                            </LeftSide>
+                                            </CardDisplay>
+                                            <Avatar src={props?.avatar} />
+                                        </HolderAvatar>
+                                        <Title>{props?.name}</Title>
+                                        <Space>{props.category}</Space>
+                                    </LeftSide>
 
-                            <RightSide>
-                                <Holder>
-                                    <LoveIcon />
-                                    <Count>108</Count>
-                                </Holder>
-                                <Holder>
-                                    <EyeIcon />
-                                    <Count>201</Count>
-                                </Holder>
-                            </RightSide>
-                        </Bottom>
-                    </CardHolder>
+                                    <RightSide>
+                                        <Holder>
+                                            <LoveIcon />
+                                            <Count>{props?.like}</Count>
+                                        </Holder>
+                                        <Holder>
+                                            <EyeIcon />
+                                            <Count>{props?.view}</Count>
+                                        </Holder>
+                                    </RightSide>
+                                </Bottom>
+                            </CardHolder>
+                        ))
+                    }
                 </Main>
+
+                <Biv>
+                    {
+                        pages.map(props => (
+                            <Button
+                                bg={currentPage === props ? "l" : ""}
+
+                                onClick={() => {
+                                    setCurrentPage(props)
+                                }}
+                            >{props}</Button>
+                        ))
+                    }
+                </Biv>
             </Container>
         </div>
     )
 }
 
 export default BodyCard
+
+const Button = styled.div<{ bg?: string }>`
+padding: 8px 18px;
+font-weight: 600;
+background-color: ${({ bg }) => bg ? "darkorange" : "black"};
+color: white;
+border-radius:3px;
+transition: all 350ms;
+margin: 0 5px;
+:hover{
+    cursor:pointer;
+    transform: translate(0, -5px)
+}
+`
+
+const Biv = styled.div`
+display: flex;
+margin-bottom: 30px;
+`
 
 const VideoBlack = styled.div`
 width: 350px;
@@ -106,12 +177,12 @@ z-index:-1;
 `
 
 
-const ImageHolder = styled.div`
-width: 120px;
+const ImageHolder = styled.img`
+width: 112px;
 height: 100px;
 border-radius: 5px;
 margin: 0 5px;
-background-color: red;
+object-fit: cover;
 
 `
 
@@ -140,7 +211,7 @@ font-size: 12px;
 `
 
 
-const Avatar1 = styled.div`
+const Avatar1 = styled.img`
 margin-left: 5px;
 margin-right: 5px;
 border-radius :50% ;
@@ -182,7 +253,7 @@ position: relative;
     display: block;
     width: 370px;
 height: 200px;
-background-color: silver;
+background-color: #e7e5e5;
 position: absolute;
 bottom: 40px;
 left: -10px;
@@ -249,14 +320,14 @@ const Title = styled.div`
 font-size: 13px;
 `
 
-const Avatar = styled.div`
+const Avatar = styled.img`
 margin-left: 5px;
 margin-right: 5px;
 border-radius :50% ;
 width: 25px;
 height: 25px;
 background-color: purple;
-
+object-fit:cover;
 
 /* :hover ${CardDisplay} {
     display:block
@@ -415,4 +486,8 @@ margin: 20px 0;
 const Container = styled.div`
 width: 100%;
 min-height: 30vh;
+
+display: flex;
+flex-direction: column;
+align-items: center;
 `
