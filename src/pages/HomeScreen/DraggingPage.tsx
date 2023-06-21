@@ -12,73 +12,116 @@ import pix9 from "../../assets/9.jpeg"
 
 import { DragDropContext, Draggable } from "react-beautiful-dnd"
 import { StrictModeDroppable as Droppable } from "../../components/common/StrickMode"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 
 
 const data = [
-    { name: "cup-cake1", image: pix1 },
-    { name: "cup-cake2", image: pix2 },
-    { name: "cup-cake3", image: pix3 },
-    { name: "cup-cake4", image: pix4 },
-    { name: "cup-cake5", image: pix5 },
-    { name: "cup-cake6", image: pix6 },
-    { name: "cup-cake7", image: pix7 },
-    { name: "cup-cake9", image: pix8 },
-    { name: "cup-cake9", image: pix9 },
-    { name: "cup-cake4", image: pix4 },
-    { name: "cup-cake5", image: pix7 },
-    { name: "cup-cake6", image: pix6 },
-    { name: "cup-cake7", image: pix1 },
-    { name: "cup-cake9", image: pix3 },
-    { name: "cup-cake6", image: pix8 },
+    { id: 15, name: "cup-cake1", image: pix1 },
+    { id: 1, name: "cup-cake2", image: pix2 },
+    { id: 2, name: "cup-cake3", image: pix3 },
+    { id: 3, name: "cup-cake4", image: pix4 },
+    { id: 4, name: "cup-cake5", image: pix5 },
+    { id: 5, name: "cup-cake6", image: pix6 },
+    { id: 6, name: "cup-cake7", image: pix7 },
+    { id: 7, name: "cup-cake9", image: pix8 },
+    { id: 8, name: "cup-cake9", image: pix9 },
+    { id: 9, name: "cup-cake4", image: pix4 },
+    { id: 10, name: "cup-cake5", image: pix7 },
+    { id: 11, name: "cup-cake6", image: pix6 },
+    { id: 12, name: "cup-cake7", image: pix1 },
+    { id: 13, name: "cup-cake9", image: pix3 },
+    { id: 14, name: "cup-cake6", image: pix8 },
 ]
-
-
-
 
 const DraggingPage = () => {
     const [newData, setNewData] = useState<{}[]>(data)
+    const [state, setState] = useState([])
+    const [state1, setState2] = useState(data)
+
+    useEffect(() => {
+        const arrayIdsOrder = JSON.parse(localStorage.getItem("getData")!);
+
+        if (!arrayIdsOrder && data?.length) {
+            const idsOrderArray = data.map((props) => props.id);
+            localStorage.setItem("getData", JSON.stringify(idsOrderArray));
+        }
+
+        let myArray;
+        if (arrayIdsOrder?.length && data?.length) {
+            myArray = arrayIdsOrder.map((props: any) => {
+                return data.find((el) => el.id === props);
+            });
+
+            const newItems = data.filter((el) => {
+                return !arrayIdsOrder.includes(el.id);
+            });
+
+            if (newItems?.length) myArray = [...newItems, ...myArray];
+        }
+
+        setState(myArray);
+    }, [data]);
+
+
+
 
     const dragged = (result: any) => {
         if (!result.destination) return
 
-        const items = Array.from(data)
+        const items = [...state1]
         const [preV] = items.splice(result.source.index, 1)
         items.splice(result.destination.index, 0, preV)
+        setState2(items)
 
-        setNewData(items)
+        // const idsOrderArray = items.map((task) => task.id);
+        // localStorage.setItem("getData", JSON.stringify(idsOrderArray));
+
+
     }
+
+
+    // useEffect(() => {
+    //     localStorage.setItem("getData", JSON.stringify(newData))
+    //     setState(JSON.parse(localStorage.getItem("getData")!))
+    // }, [])
+
+    console.log("Getting State: ", state)
 
     const [currentPage, setCurrentPage] = useState<number>(1)
     const [pagePerView, setPagePerView] = useState<number>(3)
 
     const lastView = currentPage * pagePerView
     const firstView = lastView - pagePerView
-    const view = data.slice(firstView, lastView)
+    const view = newData.slice(firstView, lastView)
 
     const pages: number[] = []
 
-    for (let i = 1; i < Math.ceil(data.length / pagePerView); i++) {
+    for (let i = 1; i < Math.ceil(newData.length / pagePerView); i++) {
         pages.push(i)
     }
+
+
+
 
     return (
         <div>
             <Container>
+                <br />
+                <div>Start</div>
 
                 <DragDropContext onDragEnd={dragged}>
                     <Droppable droppableId="droppableID">
                         {(provided) => (
                             <Main {...provided.droppableProps} ref={provided.innerRef}>
-                                {view.map((props: any, i) => (
+                                {state1.map((props: any, i) => (
                                     <Draggable key={i} index={i} draggableId={`${i}`}>
                                         {(provided) => (
                                             <Card
                                                 {...provided.draggableProps}
                                                 {...provided.dragHandleProps}
                                                 ref={provided.innerRef}>
-                                                <Image src={props.image} />
+                                                <Image src={props.image} loading="lazy" />
                                                 <Name>{props.name}</Name>
                                             </Card>
                                         )}

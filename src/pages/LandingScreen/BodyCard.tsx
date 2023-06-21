@@ -2,6 +2,7 @@
 import styled from 'styled-components'
 import { AiFillHeart } from "react-icons/ai"
 import { AiFillEye } from "react-icons/ai"
+import { FaRegSave } from "react-icons/fa"
 
 
 const BodyCard = () => {
@@ -22,7 +23,7 @@ const BodyCard = () => {
                                 <BlackBox>
                                 <Name>Name</Name>
                                 <Div>
-                                    <Icons />
+                                        <Icon />
                                     <Icons />
                                 </Div>
                                 </BlackBox>
@@ -89,7 +90,6 @@ const VideoBlack = styled.div`
 width: 350px;
 height: 340px;
 position: relative;
-
 
 `
 
@@ -166,7 +166,11 @@ justify-content: space-between;
 `
 
 const CardDisplay = styled.div`
-display:none
+display:none;
+
+:hover{
+    display: block;
+}
 `
 
 
@@ -286,6 +290,15 @@ justify-content: space-between;
 height: 60px;
 `
 
+const Icon = styled(FaRegSave)`
+padding: 10px;
+background: white;
+font-size: 20px;
+color: gray;
+margin: 0 5px;
+border-radius: 3px;
+`
+
 const Icons = styled(AiFillHeart)`
 padding: 10px;
 background: white;
@@ -311,6 +324,7 @@ object-fit: cover;
 /* opacity: 0; */
 transition: all 350ms;
 
+border-radius: 10px;
 :hover{
 cursor: pointer;
 display: flex;
@@ -333,6 +347,7 @@ display: flex;
 justify-content: space-between;
 align-items: center;
 
+border-radius: 10px;
 position: absolute;
 z-index: 10;
 bottom: 0;
@@ -359,7 +374,7 @@ width: 350px;
 height: 340px;
 object-fit: cover;
 transition: all 350ms;
-
+border-radius: 10px;
 :hover{
 transition: all 350ms;
 
@@ -384,7 +399,7 @@ position: relative;
 const CardHolder = styled.div`
 width: 350px;
 height: 400px;
-border: 1px solid silver;
+/* border: 1px solid silver; */
 margin: 10px;
 border-radius: 5px 5px 0 0;
 /* overflow: hidden; */

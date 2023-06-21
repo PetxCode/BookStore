@@ -8,7 +8,7 @@ const LandingScreen = () => {
         <div>
             <Hero />
             <BodyCard />
-            <DraggingPage />
+            {/* <DraggingPage /> */}
         </div>
     )
 }
