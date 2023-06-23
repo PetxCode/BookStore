@@ -9,10 +9,11 @@ import pix7 from "../../assets/7.jpeg"
 import pix8 from "../../assets/8.jpeg"
 import pix9 from "../../assets/9.jpeg"
 
-
+import React from "react"
 import { DragDropContext, Draggable } from "react-beautiful-dnd"
 import { StrictModeDroppable as Droppable } from "../../components/common/StrickMode"
 import { useEffect, useState } from "react"
+import { deleteOneQuestion, getOneQuestion, getQuestion } from "../../utils/QuestionAPIs"
 
 
 
@@ -69,40 +70,58 @@ const DraggingPage = () => {
     const dragged = (result: any) => {
         if (!result.destination) return
 
-        const items = [...state1]
-        const [preV] = items.splice(result.source.index, 1)
-        items.splice(result.destination.index, 0, preV)
-        setState2(items)
-
-        // const idsOrderArray = items.map((task) => task.id);
-        // localStorage.setItem("getData", JSON.stringify(idsOrderArray));
-
+        // const items = [...state1]
+        // const [preV] = items.splice(result.source.index, 1)
+        // items.splice(result.destination.index, 0, preV)
+        // setState2(items)
 
     }
 
 
-    // useEffect(() => {
-    //     localStorage.setItem("getData", JSON.stringify(newData))
-    //     setState(JSON.parse(localStorage.getItem("getData")!))
-    // }, [])
 
-    console.log("Getting State: ", state)
+    // const [currentPage, setCurrentPage] = useState<number>(1)
+    // const [pagePerView, setPagePerView] = useState<number>(3)
 
-    const [currentPage, setCurrentPage] = useState<number>(1)
-    const [pagePerView, setPagePerView] = useState<number>(3)
+    // const lastView = currentPage * pagePerView
+    // const firstView = lastView - pagePerView
+    // // const view = newData.slice(firstView, lastView)
 
-    const lastView = currentPage * pagePerView
-    const firstView = lastView - pagePerView
-    const view = newData.slice(firstView, lastView)
+    // const pages: number[] = []
 
-    const pages: number[] = []
+    // for (let i = 1; i < Math.ceil(newData.length / pagePerView); i++) {
+    //     pages.push(i)
+    // }
 
-    for (let i = 1; i < Math.ceil(newData.length / pagePerView); i++) {
-        pages.push(i)
+
+    const [pick, setPick] = React.useState<string>("")
+    const [newState, setNewState] = useState([])
+    const [newState1, setNewState1] = useState<any>({})
+
+
+
+    console.log(pick)
+
+    const deleteData = () => {
+        deleteOneQuestion(parseInt(pick))
     }
 
 
+    useEffect(() => {
+        const newPick = parseInt(pick)       
 
+        getQuestion().then((res: any) => {
+            console.log(res)
+            return setNewState(res)
+        })
+
+        getOneQuestion(newPick).then((res: any) => {
+            if (res) {
+                return setNewState1(res.data)
+            }
+        })
+    }, [pick])
+
+    console.log(newState1)
 
     return (
         <div>
@@ -110,7 +129,7 @@ const DraggingPage = () => {
                 <br />
                 <div>Start</div>
 
-                <DragDropContext onDragEnd={dragged}>
+                {/* <DragDropContext onDragEnd={dragged}>
                     <Droppable droppableId="droppableID">
                         {(provided) => (
                             <Main {...provided.droppableProps} ref={provided.innerRef}>
@@ -144,7 +163,47 @@ const DraggingPage = () => {
                             >{props}</Button>
                         ))
                     }
-                </Div>
+                </Div> */}
+
+                <div>
+                    {newState.map((props: any) => (
+                        <div>{props.id}, - {props.question}</div>
+                    ))}
+
+                    <br />
+                    <br />
+                    <input
+                        placeholder="Staer"
+                        value={pick}
+                        onChange={(e: any) => {
+                            setPick(e.target.value)
+                        }}
+                    />
+
+                    <br />
+                    <br />
+                    {pick}
+                    <br />
+                    <br />
+
+                    {
+                        newState1?.id ? <div>
+                            {newState1?.id!} - {newState1?.question!}
+                        </div> : <div>No value Choosen </div>
+                    }
+
+                    <br />
+
+                    <Button
+                        onClick={() => {
+                            deleteData()
+                            setPick("")
+                        }}
+                    >Done</Button>
+                    <br />
+                    <br /><br />
+                    <br />
+                </div>
 
             </Container>
         </div>

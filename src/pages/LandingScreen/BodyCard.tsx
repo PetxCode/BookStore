@@ -17,11 +17,11 @@ const BodyCard = () => {
     let lastView = itemPerPage * currentPage
     let firstView = lastView - itemPerPage
 
-    let myData = viewData.slice(firstView, lastView)
+    // let myData = viewData.slice(firstView, lastView)
 
     let pages: number[] = []
 
-    for (let i = 1; i < Math.ceil(viewData.length / itemPerPage); i++) {
+    for (let i = 1; i < Math.ceil(viewData?.length / itemPerPage); i++) {
         pages.push(i)
     }
 
@@ -38,7 +38,7 @@ const BodyCard = () => {
             <Container>
                 <Main>
                     {
-                        myData?.map((props: any) => (
+                        viewData?.map((props: any) => (
                             <CardHolder>
                                 <Card>
                                     <VideoBlack>
